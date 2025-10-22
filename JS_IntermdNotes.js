@@ -150,4 +150,161 @@ console.log(a);
 
 //NOTE 6] ___Call Stack & JS Exection Context____
 
-// [CODE] --> Global Exe Context --- will be refered to ---> 'this'
+// [CODE] --> Global Exe Context --- will be refered to ---> 'this' 
+// Global execution context is different for different environments --> Bun,Dino,Browser,Nodejs
+// 'this' value for a browser is 'Window Object'
+
+// we have 3 exe contexts
+// Global Exe Context , Function Exe Context , Eval Exe Context
+
+// 2 phases in exe ---> 1.Memory Creation Phase 2.Execution Phase
+
+// let's see step by step ki how a JS code is executed with an example 
+
+let v1=10
+let v2=20
+function sum(n1,n2){
+    let total = n1+n2
+    return total
+}
+let res1=sum(v1,v2)
+let res2=sum(25,25)
+
+// When the above example is executed using a node env
+
+// Step1: An Global execution (Global env) context is made --- and reference given to 'this'
+// Step2:Memory Creation Phase => All the variables are just taken into consideration with default initialization (like this)
+        // 1st cycle
+                // v1<-undefined
+                // v2<-undefined
+                // sum<- fn defination
+                // res1<-undefined
+                // res2<-undefined
+// Step3:Execution Phase => Vlaues will be assigned ,
+        // 2nd cycle
+                // v1<-10
+                // v2<-5
+                // sum<- [ new variable env
+                //         Execution Thread ] (Another executional context will be createdd )
+                // This above | executional context will have its own memory creation and execution phasses   
+                //            | ------------>  Memory Phase      |   Execution context
+                //                            n1 <- undefined    |   n1 <- 10      
+                //                            n2 <- undefined    |   n2 <- 20      
+                //                           total <- undefined  |   total <- 30     ( this will be returned back to its parent executional context and then it global executional)
+                // Now after this operation this executional context will be deleted 
+                // res1<-30 
+                // res2<- ( again a new executional context will be created with 2 phases then the return value will be taken) 
+       //            |-------   // sum<- [ new variable env
+                                //         Execution Thread ] (Another executional context will be createdd )
+                                // This above | executional context will have its own memory creation and execution phasses   
+                                //            | ------------>  Memory Phase      |   Execution context
+                                //                            n1 <- undefined    |   n1 <- 10      
+                                //                            n2 <- undefined    |   n2 <- 20      
+                                //                           total <- undefined  |   total <- 30     ( this will be returned back to its parent executional context and then it global executional)
+
+
+// ====== Call Stack =====
+//                      |                 |
+// whenever a new fn    |                 |
+//  is sent for exe.    |                 |
+// ---> sum() [Push]--> |                 | ---> after exe. [POP] --->
+//                      |_________________|
+//                      |Global Execution |
+//                      |     Context     |
+//                      |_________________|
+// 
+//  As a stack follows LIFO approach , whenever a function in execution(already pushed in) calls another function inside it , the called function will will pushed in and then poped out and then after it's execution the main function will be executed and poped out
+//  Similarly for n nested function calls ....
+
+
+
+//NOTE 7] ___Control Flow____
+
+// if-else statement 
+let p=false
+if (p){
+    console.log("True");
+} else {
+    console.log("False");
+}
+// if shorthand
+if (!p) console.log("False") 
+
+// if-else-if statement 
+let q=70
+if (q>100){
+    console.log("nah");
+} else if(q<50) {
+    console.log("nah");
+} else{
+    console.log("bingo");
+}
+
+// Switch case statement
+let z=20
+switch(z){
+    case 5 :
+        console.log("nah");
+        break;
+        case 10 :
+            console.log("nah");
+        break;
+    case 15 :
+        console.log("nah");
+        break;
+    case 20 :
+        console.log("bingo");
+        break; // JS is a old school language and after the match case the rest of the code will be executed if u dont write break here;
+    case 25 :
+        console.log("bingo");
+        break;
+        case 30 :
+            console.log("bingo");
+            break;
+    default :
+    console.log("not at all"); // only for default the break statement can be ignored
+}
+
+// Falsy values : 
+//    1. false
+//    2. 0
+    //    3. -0
+    //    4. BigInt (this datatype)
+    //    5. Nan (Not a Number)
+    //    6. "" (Empty string)
+    //    7. null
+    //    8. undefined
+    //    9. 0n
+    //   10. string.length === 0 (to check for empty string)
+    //   11. Object.keys(our_obj).length === 0 (to check for empty object)
+
+    // Truthy values : 
+    //    1. true
+    //    2. "0"
+    //    3. 'false'
+    //    4. " "
+    //    5. []
+    //    6. {}
+    //    7. function(){}
+    //    8. false == 0
+    //    9. false == ''
+    //   10. 0 == ''
+    
+// Nullish Coalescing Operator ( ?? ) : to safegaurd code from null / undefined
+
+// under certain cases we might get 2 values for a single variable from the database , if such cases this operator is to make sure the varible takes the null or undefined values or if any complex functions recevied
+let vl1;
+// this assigns as per the null safety of the variable 
+vl1 = 5 ?? 10 // 5 will be assigned
+vl1 = null ?? 5 // 10 will be assigned
+vl1 = undefined ?? 15 // 15 will be assigned
+vl1 = null ?? 10 ?? 20 // 10 will be assigned 
+// Basicallly this acts as the fallback for value assignment by assigning a flag value where a variable would probably get an null or undefined value
+
+// Terniary Operator
+
+// condition ? True : False
+const ice =10
+ice>20 ? console.log("expensive") : console.log("cheap")
+
+//NOTE 8] ___Loops____
