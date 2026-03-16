@@ -358,8 +358,3 @@ console.log(i); // This like calling the object values with an alias
 
 
 // No more a beginner bro ..... Let's move ahead to Intermidiate
-
-
-
-
-

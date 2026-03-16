@@ -265,9 +265,9 @@ switch(z){
     console.log("not at all"); // only for default the break statement can be ignored
 }
 
-// Falsy values : 
-//    1. false
-//    2. 0
+    // Falsy values : 
+    //    1. false
+    //    2. 0
     //    3. -0
     //    4. BigInt (this datatype)
     //    5. Nan (Not a Number)
@@ -308,3 +308,208 @@ const ice =10
 ice>20 ? console.log("expensive") : console.log("cheap")
 
 //NOTE 8] ___Loops____
+
+// for loop
+arr=[20,20,10,30,40,50,90]   //An iterable
+for (let i = 0; i < arr.length; i++) {  // For loop syntax with conditional , and incrementation / decrementation
+    const ele = arr[i];
+    console.log(ele);
+}
+
+// Nested For loop
+for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 5; j++) {
+        console.log(`Inner loop value: ${j} || Outer loop value:  ${i}`);
+    }
+}     
+
+// Break and Continue keywords
+
+for (let i = 0; i <=20; i++) {
+    if(i==5){
+        console.log("5 value is here");
+        break;     // This will immediately exit the loop and will not continue it's iterations
+    }
+    console.log(`Value of i is ${i}`);
+}
+
+for (let i = 0; i <=20; i++) {
+    if(i==5){
+        console.log("5 value is here");
+        continue;   // This will just skip the current iteration
+    }
+    console.log(`Value of i is ${i}`);
+}
+
+// While Loop
+ let i=5;
+ while(i<10){    // Loop runs till condition is true 
+    console.log(`Looping ${i}`);
+    i+=1  // Incremenation / decrementation
+}
+
+// Do While Loop
+let j=10;
+do{     // This Loop excutes first and then checks condition
+    console.log(`Score is ${i}`); // This will run n+1 times for n iterations
+    j+=2
+}while(j<20)  
+
+//NOTE 9] ___High Order Array Loops____
+
+// These are array specifc loops , these loops are mainly used for retiving objects for an iterable
+
+// for of loop (Iterator of Object)
+
+arr=[1,2,3,4,5,5,7,8]
+str="JavaScript makes me cry"
+for (const val of arr) {    // No need of any conditional or incrementation ..... It runs until u have an element/ object in the iterable
+    console.log(val);   
+}
+for (const val of str) {    // iterable is a string and this gives each charecter
+    console.log(val);   
+}
+
+// Map data structure (iterable) (A key-value pair object is not iterable)
+
+const map = new Map()  // an data structure which holds key value pairs
+map.set('Js',"JavaScript")  // map.set function is used set values in the map data stricture
+map.set('py',"Python")
+map.set('cpp',"C++")
+map.set('rb',"ruby")
+
+console.log(map);  // O/p : Map(3) { 'Js' => 'JavaScript', 'py' => 'Python', 'cpp' => 'C++' }
+
+// Use of for of loop on a map  
+for (const key of map) { // here key is one complete key-value pair from the map
+    console.log(key);
+}
+for (const [key,vlu] of map) { // here [key,vlu] (square bracket is mandatory to destructure)is one complete key and value from the map
+    console.log(`${key} abbrivates to ${vlu}`);
+}
+
+// Iterating key-value pair of object
+
+const obj={
+    'Js':"javascript",
+    'py':"python",
+    'cpp':"C++"
+}
+for (const key of obj) { // here key value is just the key from the object , values have to be retireved using the keys
+    console.log(`${key} abbrivates to ${obj[key]}`);
+}
+
+// For In Loop
+// we can't use for-in on map , if used it will not return anything
+const arr=['js','py','rb','cpp'] // keys of an array are it's index values
+for (const key in arr) {
+    console.log(key);
+}
+
+// For Each Loop (used majorly in web dev)
+// this passes an element of an iterable as a parameter in an callback (simply function)
+
+const fe_arr=['js','py','rb','cpp','java','php']
+
+function printme(itm){
+    console.log("prints : ",itm);
+}
+fe_arr.forEach(printme) // callback is a function
+
+// Declaring the function explicitly
+fe_arr.forEach(function(val){  // This function in here won't have a function name
+    console.log(val);
+})
+
+fe_arr.forEach((val)=>{   // using an arrow function
+    console.log(val);
+})
+
+// ForEach has more paramter i.e, index and the whole array
+fe_arr.forEach((val,idx,arr)=>{   // using an arrow function
+    console.log(idx,val,arr);
+})
+
+const mycding=[
+    {
+        lang:'javascript',
+        extension:'.js',
+        version:'1.2.3'
+    },    
+    {
+        lang:'python',
+        extension:'.py',
+        version:'11.20.3'
+    },
+    {
+        lang:'java',
+        extension:'.java',
+        version:'1.12.33'
+    }
+]
+
+mycding.forEach((itm)=>{
+    console.log(`${itm.lang} has extension ${itm.extension} with version ${itm.version}`);
+})  // This is destructuring logic of an object when u are trying retrive each attribute of an object from a database
+
+
+//NOTE 9] ___Filter,Map & Reduce in JS____
+
+// foreach loop will never return anything . If u use a foreach on any iterable and try to return value it returns `undefined`
+// How to return values ??
+
+// Filter Syntax -
+
+// iterable.filter((element)=>{
+//     return condition
+// }
+
+// Example :  const usebooks = books.filter( (bk) => bk.genre === "computer_science") && bk.publish >=2000  // books=[{},{},{},{}] an array of objects with some key-value pair
+
+const nums=[1,2,3,4,5,6,2,14,56,62,66]
+const newnums=nums.filter((nums)=>(num>10))  // this is a simple arrow function with explicit return 
+
+// Map syntax - 
+const nums2=[1,2,3,4,5,6,2,14,56,62,66]
+nums.map( (n) => n+10)  // used to map/replace one value with another value
+
+// Chaining
+const newNums=nums2.map((num)=>num+10).filter((num)=>num%10 == 0)
+
+// Reduce Syntax 
+array.reduce((accumulator, currentValue) => { 
+  return accumulator + currentValue;    // return the new accumulator value for the next iteration
+}, initialValue); // initialValue is optional but recommended
+
+
+// Reduce 
+const nn=[2,3,1,4,13,4,2,3,1,6]
+const ttl = nn.reduce((acc,currentval)=>acc+currntvl, 0); 
+console.log(ttl);
+
+// Reduce application
+const shop=[
+    {
+        itm:'phone',
+        price:30000,
+        quantity:'2'
+    },    
+    {
+        itm:'laptop',
+        price:80000,
+        quantity:'1'
+    },
+    {
+        itm:'charger',
+        price:1000,
+        quantity:'4'
+    }
+]
+
+console.log(shop.reduce((acc,item)=>acc+item.price, 0)); // Gives the  cart value 
+
+
+
+
+
+// Done Buddy , let's move on to advanced topics for WebDev integration
