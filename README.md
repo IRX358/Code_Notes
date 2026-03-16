@@ -10,10 +10,9 @@
 
 <p align="center">
 
-![Stars](https://img.shields.io/github/stars/yourusername/programming-notes?style=for-the-badge)
-![Forks](https://img.shields.io/github/forks/yourusername/programming-notes?style=for-the-badge)
-![Repo Size](https://img.shields.io/github/repo-size/yourusername/programming-notes?style=for-the-badge)
-![License](https://img.shields.io/github/license/yourusername/programming-notes?style=for-the-badge)
+![Stars](https://img.shields.io/github/stars/irx358/programming-notes-hub?style=for-the-badge)
+![Forks](https://img.shields.io/github/forks/irx358/programming-notes-hub?style=for-the-badge)
+![Repo Size](https://img.shields.io/github/repo-size/irx358/programming-notes-hub?style=for-the-badge)
 ![Contributions](https://img.shields.io/badge/Contributions-Welcome-brightgreen?style=for-the-badge)
 
 </p>
