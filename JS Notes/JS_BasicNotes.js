@@ -1,7 +1,7 @@
 // JavaScript notes with code from here
 //JS needs runtime environments to run locally without browser like "Node js" "Deno" "Bun"
 // Here using Node Js ---> To run your .js file use 'node filename.js'
-//ANCHOR - To run one particular snippet select it and then "ctrl+r r" , if not selected then entire file will run
+//ANCHOR - To run one particular snippet select it and then "ctrl+r r" , if not selected then entire file will run (Code runner extention to be installed)
 
 //NOTE 1] ___ Variables_____________
 let ir = 220;
