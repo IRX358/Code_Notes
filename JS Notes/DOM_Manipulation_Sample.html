@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Manipulation Sample</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2.5em;
+        }
+        
+        h2 {
+            color: #667eea;
+            margin: 30px 0 15px 0;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .box {
+            width: 200px;
+            height: 200px;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .box.highlight {
+            background: #FF6B6B;
+            transform: scale(1.1);
+        }
+        
+        .box.active {
+            background: #4ECDC4;
+        }
+        
+        input, textarea {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .dynamic-container {
+            border: 2px dashed #ddd;
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 100px;
+            margin: 20px 0;
+        }
+        
+        .dynamic-item {
+            background: #667eea;
+            color: white;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .dynamic-item:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+        
+        .output {
+            background: #2E2E2E;
+            color: #4ECDC4;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .color-box {
+            width: 100px;
+            height: 100px;
+            background: #667eea;
+            margin: 10px;
+            display: inline-block;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .moving-box {
+            width: 50px;
+            height: 50px;
+            background: #FF6B6B;
+            position: relative;
+            border-radius: 5px;
+        }
+        
+        .info-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .storage-info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 DOM Manipulation Playground</h1>
+        
+        <!-- Section 1: Element Selection -->
+        <div class="section">
+            <h2>1. Element Selection</h2>
+            <div id="header">Header Element (ID: header)</div>
+            <div class="btn">Button 1 (Class: btn)</div>
+            <div class="btn">Button 2 (Class: btn)</div>
+            <div class="btn">Button 3 (Class: btn)</div>
+            <p>Paragraph 1</p>
+            <p>Paragraph 2</p>
+            <button onclick="testSelection()">Test Selection</button>
+            <div class="output" id="selectionOutput">Output will appear here...</div>
+        </div>
+        
+        <!-- Section 2: Element Manipulation -->
+        <div class="section">
+            <h2>2. Element Manipulation</h2>
+            <button onclick="createElement()">Create Element</button>
+            <button onclick="appendElement()">Append Element</button>
+            <button onclick="removeElement()">Remove Last Element</button>
+            <button onclick="replaceElement()">Replace Element</button>
+            <div class="dynamic-container" id="dynamicContainer">
+                <p>Dynamic elements will appear here</p>
+            </div>
+        </div>
+        
+        <!-- Section 3: DOM Traversal -->
+        <div class="section">
+            <h2>3. DOM Traversal</h2>
+            <div class="parent" id="parentElement">
+                <div class="child">Child 1</div>
+                <div class="child">Child 2</div>
+                <div class="child">Child 3</div>
+            </div>
+            <button onclick="testTraversal()">Test Traversal</button>
+            <div class="output" id="traversalOutput">Traversal output...</div>
+        </div>
+        
+        <!-- Section 4: Styling and CSS -->
+        <div class="section">
+            <h2>4. Styling and CSS Manipulation</h2>
+            <div class="box" id="styleBox">Style Me!</div>
+            <button onclick="changeBackground()">Change Background</button>
+            <button onclick="toggleHighlight()">Toggle Highlight</button>
+            <button onclick="addActiveClass()">Add Active Class</button>
+            <button onclick="removeActiveClass()">Remove Active Class</button>
+            <button onclick="getComputedStyle()">Get Computed Style</button>
+            <div class="output" id="styleOutput">Style output...</div>
+        </div>
+        
+        <!-- Section 5: Attributes -->
+        <div class="section">
+            <h2>5. Attributes and Properties</h2>
+            <a href="https://example.com" id="testLink" data-user-id="123">Test Link</a>
+            <br><br>
+            <input type="checkbox" id="testCheckbox"> Checkbox
+            <input type="text" id="testInput" placeholder="Type something...">
+            <br><br>
+            <button onclick="testAttributes()">Test Attributes</button>
+            <div class="output" id="attributeOutput">Attribute output...</div>
+        </div>
+        
+        <!-- Section 6: Event Handling -->
+        <div class="section">
+            <h2>6. Event Handling</h2>
+            <button id="clickBtn" class="click-btn">Click Me!</button>
+            <button id="dblClickBtn">Double Click Me!</button>
+            <button id="mouseOverBtn">Mouse Over Me!</button>
+            <div class="box" id="eventBox">Event Box</div>
+            <input type="text" id="keyInput" placeholder="Type to see key events...">
+            <div class="output" id="eventOutput">Event output...</div>
+        </div>
+        
+        <!-- Section 7: Forms -->
+        <div class="section">
+            <h2>7. Form Handling</h2>
+            <form id="myForm">
+                <div>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div>
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="4"></textarea>
+                </div>
+                <button type="submit">Submit Form</button>
+                <button type="button" onclick="resetForm()">Reset Form</button>
+            </form>
+            <div class="output" id="formOutput">Form data will appear here...</div>
+        </div>
+        
+        <!-- Section 8: Animation -->
+        <div class="section">
+            <h2>8. Animation</h2>
+            <div class="box animated-box" id="animatedBox">Animated Box</div>
+            <div class="moving-box" id="movingBox"></div>
+            <br>
+            <button onclick="startAnimation()">Start Animation</button>
+            <button onclick="stopAnimation()">Stop Animation</button>
+        </div>
+        
+        <!-- Section 9: Storage -->
+        <div class="section">
+            <h2>9. Local Storage & Session Storage</h2>
+            <input type="text" id="storageKey" placeholder="Key">
+            <input type="text" id="storageValue" placeholder="Value">
+            <button onclick="saveToLocalStorage()">Save to LocalStorage</button>
+            <button onclick="getFromLocalStorage()">Get from LocalStorage</button>
+            <button onclick="clearLocalStorage()">Clear LocalStorage</button>
+            <button onclick="saveToSessionStorage()">Save to SessionStorage</button>
+            <button onclick="getFromSessionStorage()">Get from SessionStorage</button>
+            <div class="storage-info" id="storageOutput">Storage info...</div>
+        </div>
+        
+        <!-- Section 10: Event Delegation -->
+        <div class="section">
+            <h2>10. Event Delegation</h2>
+            <div id="delegationContainer" style="border: 2px solid #667eea; padding: 20px; border-radius: 10px;">
+                <button class="dynamic-button">Dynamic Button 1</button>
+                <button class="dynamic-button">Dynamic Button 2</button>
+                <button class="dynamic-button">Dynamic Button 3</button>
+                <button onclick="addDynamicButton()">Add New Button</button>
+            </div>
+            <div class="output" id="delegationOutput">Delegation output...</div>
+        </div>
+    </div>
+    
+    <script>
+        // ============ 1. Element Selection ============
+        function testSelection() {
+            const output = document.getElementById('selectionOutput');
+            output.innerHTML = '';
+            
+            // getElementById
+            const header = document.getElementById('header');
+            output.innerHTML += `getElementById('header'): ${header.textContent}<br>`;
+            
+            // getElementsByClassName
+            const buttons = document.getElementsByClassName('btn');
+            output.innerHTML += `getElementsByClassName('btn'): Found ${buttons.length} elements<br>`;
+            
+            // getElementsByTagName
+            const paragraphs = document.getElementsByTagName('p');
+            output.innerHTML += `getElementsByTagName('p'): Found ${paragraphs.length} elements<br>`;
+            
+            // querySelector
+            const firstBtn = document.querySelector('.btn');
+            output.innerHTML += `querySelector('.btn'): ${firstBtn.textContent}<br>`;
+            
+            // querySelectorAll
+            const allBtns = document.querySelectorAll('.btn');
+            output.innerHTML += `querySelectorAll('.btn'): Found ${allBtns.length} elements<br>`;
+        }
+        
+        // ============ 2. Element Manipulation ============
+        let elementCount = 0;
+        
+        function createElement() {
+            const newDiv = document.createElement('div');
+            newDiv.className = 'dynamic-item';
+            newDiv.textContent = `Element ${++elementCount}`;
+            newDiv.onclick = function() {
+                this.remove();
+            };
+            return newDiv;
+        }
+        
+        function appendElement() {
+            const container = document.getElementById('dynamicContainer');
+            const newElement = createElement();
+            container.appendChild(newElement);
+        }
+        
+        function removeElement() {
+            const container = document.getElementById('dynamicContainer');
+            if (container.lastElementChild && container.lastElementChild.className === 'dynamic-item') {
+                container.lastElementChild.remove();
+            }
+        }
+        
+        function replaceElement() {
+            const container = document.getElementById('dynamicContainer');
+            if (container.firstElementChild) {
+                const newElement = createElement();
+                container.replaceChild(newElement, container.firstElementChild);
+            }
+        }
+        
+        // ============ 3. DOM Traversal ============
+        function testTraversal() {
+            const output = document.getElementById('traversalOutput');
+            const parent = document.getElementById('parentElement');
+            
+            output.innerHTML = '';
+            output.innerHTML += `Parent element: ${parent.id}<br>`;
+            output.innerHTML += `First child: ${parent.firstElementChild.textContent}<br>`;
+            output.innerHTML += `Last child: ${parent.lastElementChild.textContent}<br>`;
+            output.innerHTML += `Number of children: ${parent.children.length}<br>`;
+            
+            const firstChild = parent.firstElementChild;
+            output.innerHTML += `Next sibling: ${firstChild.nextElementSibling.textContent}<br>`;
+            output.innerHTML += `Previous sibling: ${parent.lastElementChild.previousElementSibling.textContent}<br>`;
+        }
+        
+        // ============ 4. Styling and CSS ============
+        function changeBackground() {
+            const box = document.getElementById('styleBox');
+            const colors = ['#667eea', '#764ba2', '#FF6B6B', '#4ECDC4', '#FFE66D'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            box.style.backgroundColor = randomColor;
+        }
+        
+        function toggleHighlight() {
+            const box = document.getElementById('styleBox');
+            box.classList.toggle('highlight');
+        }
+        
+        function addActiveClass() {
+            const box = document.getElementById('styleBox');
+            box.classList.add('active');
+        }
+        
+        function removeActiveClass() {
+            const box = document.getElementById('styleBox');
+            box.classList.remove('active');
+        }
+        
+        function getComputedStyle() {
+            const box = document.getElementById('styleBox');
+            const output = document.getElementById('styleOutput');
+            const computed = window.getComputedStyle(box);
+            output.innerHTML = `Background: ${computed.backgroundColor}<br>`;
+            output.innerHTML += `Color: ${computed.color}<br>`;
+            output.innerHTML += `Font Size: ${computed.fontSize}<br>`;
+        }
+        
+        // ============ 5. Attributes ============
+        function testAttributes() {
+            const output = document.getElementById('attributeOutput');
+            const link = document.getElementById('testLink');
+            const checkbox = document.getElementById('testCheckbox');
+            const input = document.getElementById('testInput');
+            
+            output.innerHTML = '';
+            output.innerHTML += `Link href: ${link.getAttribute('href')}<br>`;
+            output.innerHTML += `Link data-user-id: ${link.dataset.userId}<br>`;
+            
+            checkbox.checked = true;
+            output.innerHTML += `Checkbox checked: ${checkbox.checked}<br>`;
+            
+            input.value = 'Test value';
+            output.innerHTML += `Input value: ${input.value}<br>`;
+            
+            link.setAttribute('href', 'https://google.com');
+            output.innerHTML += `New href: ${link.getAttribute('href')}<br>`;
+        }
+        
+        // ============ 6. Event Handling ============
+        document.getElementById('clickBtn').addEventListener('click', function(e) {
+            const output = document.getElementById('eventOutput');
+            output.innerHTML = `Click event triggered! Target: ${e.target.textContent}<br>`;
+        });
+        
+        document.getElementById('dblClickBtn').addEventListener('dblclick', function(e) {
+            const output = document.getElementById('eventOutput');
+            output.innerHTML += `Double click event triggered!<br>`;
+        });
+        
+        document.getElementById('mouseOverBtn').addEventListener('mouseover', function(e) {
+            const output = document.getElementById('eventOutput');
+            output.innerHTML += `Mouse over event triggered!<br>`;
+        });
+        
+        const eventBox = document.getElementById('eventBox');
+        eventBox.addEventListener('mouseover', function() {
+            this.style.transform = 'scale(1.1)';
+        });
+        
+        eventBox.addEventListener('mouseout', function() {
+            this.style.transform = 'scale(1)';
+        });
+        
+        document.getElementById('keyInput').addEventListener('keydown', function(e) {
+            const output = document.getElementById('eventOutput');
+            output.innerHTML = `Key pressed: ${e.key}<br>`;
+        });
+        
+        // ============ 7. Form Handling ============
+        document.getElementById('myForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            const output = document.getElementById('formOutput');
+            output.innerHTML = `Name: ${data.name}<br>`;
+            output.innerHTML += `Email: ${data.email}<br>`;
+            output.innerHTML += `Message: ${data.message}<br>`;
+        });
+        
+        function resetForm() {
+            document.getElementById('myForm').reset();
+        }
+        
+        // ============ 8. Animation ============
+        let animationId = null;
+        let position = 0;
+        
+        function startAnimation() {
+            const box = document.getElementById('movingBox');
+            position = 0;
+            
+            function animate() {
+                position += 2;
+                box.style.left = position + 'px';
+                
+                if (position < 300) {
+                    animationId = requestAnimationFrame(animate);
+                }
+            }
+            
+            animate();
+        }
+        
+        function stopAnimation() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+        }
+        
+        // ============ 9. Storage ============
+        function saveToLocalStorage() {
+            const key = document.getElementById('storageKey').value;
+            const value = document.getElementById('storageValue').value;
+            
+            if (key && value) {
+                localStorage.setItem(key, value);
+                document.getElementById('storageOutput').innerHTML = `Saved: ${key} = ${value}`;
+            }
+        }
+        
+        function getFromLocalStorage() {
+            const key = document.getElementById('storageKey').value;
+            const value = localStorage.getItem(key);
+            
+            if (value) {
+                document.getElementById('storageOutput').innerHTML = `Retrieved: ${key} = ${value}`;
+            } else {
+                document.getElementById('storageOutput').innerHTML = `Key '${key}' not found`;
+            }
+        }
+        
+        function clearLocalStorage() {
+            localStorage.clear();
+            document.getElementById('storageOutput').innerHTML = 'LocalStorage cleared';
+        }
+        
+        function saveToSessionStorage() {
+            const key = document.getElementById('storageKey').value;
+            const value = document.getElementById('storageValue').value;
+            
+            if (key && value) {
+                sessionStorage.setItem(key, value);
+                document.getElementById('storageOutput').innerHTML = `Saved to SessionStorage: ${key} = ${value}`;
+            }
+        }
+        
+        function getFromSessionStorage() {
+            const key = document.getElementById('storageKey').value;
+            const value = sessionStorage.getItem(key);
+            
+            if (value) {
+                document.getElementById('storageOutput').innerHTML = `Retrieved from SessionStorage: ${key} = ${value}`;
+            } else {
+                document.getElementById('storageOutput').innerHTML = `Key '${key}' not found in SessionStorage`;
+            }
+        }
+        
+        // ============ 10. Event Delegation ============
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('.dynamic-button') && e.target.textContent !== 'Add New Button') {
+                const output = document.getElementById('delegationOutput');
+                output.innerHTML = `Dynamic button clicked: ${e.target.textContent}<br>`;
+            }
+        });
+        
+        let buttonCount = 4;
+        function addDynamicButton() {
+            const container = document.getElementById('delegationContainer');
+            const newButton = document.createElement('button');
+            newButton.className = 'dynamic-button';
+            newButton.textContent = `Dynamic Button ${buttonCount++}`;
+            container.insertBefore(newButton, container.lastElementChild);
+        }
+        
+        // Initialize
+        console.log('DOM Manipulation Sample Loaded');
+    </script>
+</body>
+</html>
